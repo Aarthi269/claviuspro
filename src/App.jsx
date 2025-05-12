@@ -8,12 +8,18 @@ import CalendarView from './components/CalendarView';
 import MessageView from './components/MessageView';
 import NotificationsPanel from './components/NotificationsPanel';
 import ArtificiumPage from './components/ArtificiumPage';
-
+import NewProjectModal from './components/NewProjectModal'; // Import the NewProjectModal
 
 function App() {
   const [selectedTab, setSelectedTab] = useState('Dashboard');
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [progressFilter, setProgressFilter] = useState('This Week');
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false); // State for the modal
+  const [projects, setProjects] = useState([]); // State to store projects
+
+  const addProject = (project) => {
+    setProjects((prev) => [...prev, project]);
+  };
 
   return (
     <Router>
@@ -34,7 +40,7 @@ function App() {
           <Routes>
             <Route path="/calendar" element={<CalendarView />} />
             <Route path="/messages" element={<MessageView />} />
-            <Route path="/mobile-app" element={<ArtificiumPage />} />
+            <Route path="/mobile-app" element={<ArtificiumPage projects={projects} />} />
             <Route
               path="/"
               element={
@@ -82,22 +88,25 @@ function App() {
           </Routes>
         </main>
 
-       <aside className="w-96 bg-[#0e1723] text-white flex flex-col justify-between h-screen py-8 px-4 border-r border-gray-700">
-        
-        {/* Header Section */}
-        <div className="w-full">
-          <h2 className="text-xl font-semibold text-left mt-4">Today</h2>
-          <hr className="border-t border-gray-700 mt-5" />
-        </div>
+        <aside className="w-96 bg-[#0e1723] text-white flex flex-col justify-between h-screen py-8 px-4 border-r border-gray-700">
+          <div className="w-full">
+            <h2 className="text-xl font-semibold text-left mt-4">Today</h2>
+            <hr className="border-t border-gray-700 mt-5" />
+          </div>
 
-
-        {/* Message */}
-        <div className="text-center">
-          <p className="font-semibold text-lg">You've done all your tasks</p>
-          <p className="text-mlg text-gray-400 mt-1 mb-100">Time to have some fun!</p>
-        </div>
-      </aside>
+          <div className="text-center">
+            <p className="font-semibold text-lg">You've done all your tasks</p>
+            <p className="text-mlg text-gray-400 mt-1 mb-100">Time to have some fun!</p>
+          </div>
+        </aside>
       </div>
+
+      {/* New Project Modal */}
+      <NewProjectModal
+        isOpen={isProjectModalOpen}
+        onClose={() => setIsProjectModalOpen(false)}
+        addProject={addProject}
+      />
     </Router>
   );
 }

@@ -9,10 +9,24 @@ const colors = [
   'bg-teal-500', 'bg-cyan-500', 'bg-purple-500'
 ];
 
-const NewProjectModal = ({ isOpen, onClose }) => {
+const NewProjectModal = ({ isOpen, onClose, addProject }) => {
   const [projectName, setProjectName] = useState('Flash');
   const [selectedColor, setSelectedColor] = useState('bg-yellow-500');
   const [selectedIcon, setSelectedIcon] = useState('Bolt');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newProject = {
+      id: Date.now(),
+      name: projectName,
+      color: selectedColor,
+      icon: selectedIcon,
+    };
+
+    addProject(newProject);
+    onClose();
+  };
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 z-50 flex items-center justify-center bg-gray bg-opacity-50 backdrop-blur-sm">
@@ -24,7 +38,7 @@ const NewProjectModal = ({ isOpen, onClose }) => {
           <X className="w-5 h-5" />
         </button>
         <h2 className="text-lg font-bold mb-4">Create a new project</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-400 mb-1">Project name</label>
             <input
@@ -68,23 +82,6 @@ const NewProjectModal = ({ isOpen, onClose }) => {
               className="w-full p-2 border border-gray-700 rounded bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Email, comma separated"
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-400 mb-1">Existing Members</label>
-            <ul className="space-y-2">
-              <li className="flex items-center justify-between">
-                <span>Mikołaj Niżnik</span>
-                <span className="text-sm text-gray-500">Owner</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span>Alaina Saikh</span>
-                <span className="text-sm text-gray-500">Editor</span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span>Robbie Harrison</span>
-                <span className="text-sm text-gray-500">Viewer</span>
-              </li>
-            </ul>
           </div>
           <div className="flex justify-between mt-6">
             <button
